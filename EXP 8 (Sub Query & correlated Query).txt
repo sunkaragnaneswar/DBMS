@@ -1,0 +1,80 @@
+Enter password: *****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 36
+Server version: 5.5.62 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement. 
+
+mysql> use resturant;
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_resturant |
++---------------------+
+| custdetails         |
+| customer            |
+| customerorder       |
+| custpayment         |
+| custroom            |
++---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select*from custdetails;
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+| custid | custname | custmobileno | custorder | custcharge | custpaymentmethod | custaddress | custaadharno | custoccupation |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+|  20231 | SAI      |      6304632 | FOOD      |       1100 | UPI               | TS  |     45632198 | DANCER         |
+|  20232 | SASI     |      7989632 | ROOM      |       2000 | CARD              | TS  |     78945612 | BUSINESS       |
+|  20233 | RAVI     |      7989343 | FOOD      |       1200 | CASH              | AP  |     66498231 | FARMER         |
+|  20234 | CHANDU   |      9390260 | ROOM      |       1600 | UPI               | TS  |     12345678 | STUDENT        |
+|  20235 | BANNU    |     91823157 | FOOD      |        600 | CREDIT CARD       | TN  |     98712356 | ENGINEER       |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select custid,custname from custdetails where custname IN(select custname from custde
+tails where custorder="FOOD");
++--------+----------+
+| custid | custname |
++--------+----------+
+|  20231 | SAI      |
+|  20233 | RAVI     |
+|  20235 | BANNU    |
++--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> create table custdetails1(ID int(10),NAME varchar(20));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into custdetails1(ID,NAME)
+    -> select custid,custname
+    ->  from custdetails where custorder="FOOD";
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select*from custdetails1;
++-------+-------+
+| ID    | NAME  |
++-------+-------+
+| 20231 | SAI   |
+| 20233 | RAVI  |
+| 20235 | BANNU |
++-------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select custid,(select NAME from custdetails1 where ID=20233)as custname,custmobileno,
+custorder,custcharge,custpaymentmethod,custaddress,custaadharno,custoccupation from custdeta
+ils where custid=20233;
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+| custid | custname | custmobileno | custorder | custcharge | custpaymentmethod | custaddress | custaadharno | custoccupation |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+|  20233 | RAVI     |      7989343 | FOOD      |       1200 | CASH              | AP  |     66498231 | FARMER         |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+1 row in set (0.01 sec)
+
+mysql>

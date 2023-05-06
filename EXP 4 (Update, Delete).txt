@@ -1,0 +1,69 @@
+Enter password: *****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 18
+Server version: 5.5.62 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use resturant;
+Database changede
+mysql> select*from custdetails;
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+| custid | custname | custmobileno | custorder | custcharge | custpaymentmethod | custaddress |
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+|      1 | RAVI     |      6305421 | FOOD      |       1100 | UPI               | TS  |
+|      2 | VAMSI    |      7989343 | ROOM      |       2000 | DEBITCARD         | AP  |
+|      3 | SAI      |      6304521 | FOOD      |        500 | CASH              | TS  |
+|      4 | SASI     |     93902605 | ROOM      |       1500 | UPI               | TN  |
+|  20231 | SAI      |      6304632 | FOOD      |       1100 | UPI               | TS  |
+|  20232 | SASI     |      7989632 | ROOM      |       2000 | CARD              | TS  |
+|  20233 | RAVI     |      7989343 | FOOD      |       1200 | CASH              | AP  |
+|  20234 | CHANDU   |      9390260 | ROOM      |       1600 | UPI               | TS  |
+|  20235 | BANNU    |     91823157 | FOOD      |        600 | CREDIT CARD       | AP  |
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> update custdetails set custaddress="TN" where custname="BANNU";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select*from custdetails;
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+| custid | custname | custmobileno | custorder | custcharge | custpaymentmethod | custaddress |
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+|      1 | RAVI     |      6305421 | FOOD      |       1100 | UPI               | TS  |
+|      2 | VAMSI    |      7989343 | ROOM      |       2000 | DEBITCARD         | AP  |
+|      3 | SAI      |      6304521 | FOOD      |        500 | CASH              | TS  |
+|      4 | SASI     |     93902605 | ROOM      |       1500 | UPI               | TN  |
+|  20231 | SAI      |      6304632 | FOOD      |       1100 | UPI               | TS  |
+|  20232 | SASI     |      7989632 | ROOM      |       2000 | CARD              | TS  |
+|  20233 | RAVI     |      7989343 | FOOD      |       1200 | CASH              | AP  |
+|  20234 | CHANDU   |      9390260 | ROOM      |       1600 | UPI               | TS  |
+|  20235 | BANNU    |     91823157 | FOOD      |        600 | CREDIT CARD       | TN  |
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> delete from custdetails where custcharge="500";
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select*from custdetails;
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+| custid | custname | custmobileno | custorder | custcharge | custpaymentmethod | custaddress |
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+|      1 | RAVI     |      6305421 | FOOD      |       1100 | UPI               | TS  |
+|      2 | VAMSI    |      7989343 | ROOM      |       2000 | DEBITCARD         | AP  |
+|      4 | SASI     |     93902605 | ROOM      |       1500 | UPI               | TN  |
+|  20231 | SAI      |      6304632 | FOOD      |       1100 | UPI               | TS  |
+|  20232 | SASI     |      7989632 | ROOM      |       2000 | CARD              | TS  |
+|  20233 | RAVI     |      7989343 | FOOD      |       1200 | CASH              | AP  |
+|  20234 | CHANDU   |      9390260 | ROOM      |       1600 | UPI               | TS  |
+|  20235 | BANNU    |     91823157 | FOOD      |        600 | CREDIT CARD       | TN  |
++--------+----------+--------------+-----------+------------+-------------------+-------------+
+8 rows in set (0.00 sec)
+
+mysql>

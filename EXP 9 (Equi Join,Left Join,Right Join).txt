@@ -1,0 +1,233 @@
+Enter password: *****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.5.62 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current inputstatement.
+
+mysql> use resturant;
+Database changed
+mysql> select*from custdetails;
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+| custid | custname | custmobileno | custorder | custcharge | custpaymentmethod | custaddress | custaadharno | custoccupation |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+|  20231 | SAI      |      6304632 | FOOD      |       1100 | UPI            | TS          |     45632198 | DANCER         |
+|  20232 | SASI     |      7989632 | ROOM      |       2000 | CARD            | TS          |     78945612 | BUSINESS       |
+|  20233 | RAVI     |      7989343 | FOOD      |       1200 | CASH            | AP          |     66498231 | FARMER         |
+|  20234 | CHANDU   |      9390260 | ROOM      |       1600 | UPI            | TS          |     12345678 | STUDENT        |
+|  20235 | BANNU    |     91823157 | FOOD      |        600 | CREDIT CARD       | TN          |     98712356 | ENGINEER       |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+5 rows in set (0.02 sec)
+
+mysql> create table charges(Custid int(20),chargeson varchar(20),charge int(20));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into charges values("20231","FOOD","1100");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into charges values("20232","ROOM","2000");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into charges values("20235","FOOD","600");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select*from charges;
++--------+-----------+--------+
+| Custid | chargeson | charge |
++--------+-----------+--------+
+|  20231 | FOOD      |   1100 |
+|  20232 | ROOM      |   2000 |
+|  20235 | FOOD      |    600 |
+|  20235 | FOOD      |    600 |
++--------+-----------+--------+
+4 rows in set (0.00 sec)
+
+mysql> alter table charges drop column custid;
+Query OK, 4 rows affected (0.03 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> alter table charges add custid int(20);
+Query OK, 4 rows affected (0.03 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> update charges set custid=20231 where charge="1100";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  update charges set custid=20232 where charge="2000";
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  update charges set custid=20235 where charge="600";
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql>  select*from charges;
++-----------+--------+--------+
+| chargeson | charge | custid |
++-----------+--------+--------+
+| FOOD      |   1100 |  20231 |
+| ROOM      |   2000 |  20232 |
+| FOOD      |    600 |  20235 |
+| FOOD      |    600 |  20235 |
++-----------+--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select*from charges;
++-----------+--------+-------+
+| chargeson | charge | id    |
++-----------+--------+-------+
+| FOOD      |   1100 | 20231 |
+| ROOM      |   2000 | 20232 |
+| FOOD      |    800 |  NULL |
++-----------+--------+-------+
+3 rows in set (0.00 sec)
+
+mysql> update charges set id=20235 where charge="800";
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  select*from charges;
++-----------+--------+-------+
+| chargeson | charge | id    |
++-----------+--------+-------+
+| FOOD      |   1100 | 20231 |
+| ROOM      |   2000 | 20232 |
+| FOOD      |    800 | 20235 |
++-----------+--------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select id,charge,custname,custcharge from charges,custdetails where custdetails.custid=charges.id;
++-------+--------+----------+------------+
+| id    | charge | custname | custcharge |
++-------+--------+----------+------------+
+| 20231 |   1100 | SAI      |       1100 |
+| 20232 |   2000 | SASI     |       2000 |
+| 20235 |    800 | BANNU    |        600 |
++-------+--------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select id,custname,charge,custaddress from charges left outer join custdetails on charges.id=custdetails.custid;
++-------+----------+--------+-------------+
+| id    | custname | charge | custaddress |
++-------+----------+--------+-------------+
+| 20231 | SAI      |   1100 | TS          |
+| 20232 | SASI     |   2000 | TS          |
+| 20235 | BANNU    |    800 | TN          |
++-------+----------+--------+-------------+
+3 rows in set (0.04 sec)
+
+mysql> select id,custname,charge,custaddress from charges right outer join custdetails on charges.id=custdetails.custid;
++-------+----------+--------+-------------+
+| id    | custname | charge | custaddress |
++-------+----------+--------+-------------+
+| 20231 | SAI      |   1100 | TS          |
+| 20232 | SASI     |   2000 | TS          |
+|  NULL | RAVI     |   NULL | AP          |
+|  NULL | CHANDU   |   NULL | TS          |
+| 20235 | BANNU    |    800 | TN          |
++-------+----------+--------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into charges values(3,"20233","1600");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert charges values(4,"20234","1200");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select id,custname,charge,custaddress from charges right outer join custdetails on charges.id=custdetails.custid;
++-------+----------+--------+-------------+
+| id    | custname | charge | custaddress |
++-------+----------+--------+-------------+
+| 20231 | SAI      |   1100 | TS          |
+| 20232 | SASI     |   2000 | TS          |
+|  NULL | RAVI     |   NULL | AP          |
+|  NULL | CHANDU   |   NULL | TS          |
+| 20235 | BANNU    |    800 | TN          |
++-------+----------+--------+-------------+
+5 rows in set (0.00 sec)
+
+mysql>  delete from charges where charge="600";
+Query OK, 2 rows affected (0.04 sec)
+
+mysql>  select*from charges;
++-----------+--------+--------+
+| chargeson | charge | custid |
++-----------+--------+--------+
+| FOOD      |   1100 |  20231 |
+| ROOM      |   2000 |  20232 |
++-----------+--------+--------+
+2 rows in set (0.00 sec)
+
+mysql> insert into charges values("FOOD","800","20234");
+Query OK, 1 row affected (0.01 sec)
+
+mysql>   select*from charges;
++-----------+--------+--------+
+| chargeson | charge | custid |
++-----------+--------+--------+
+| FOOD      |   1100 |  20231 |
+| ROOM      |   2000 |  20232 |
+| FOOD      |    800 |  20234 |
++-----------+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> update charges set custid="20238" where charge="800";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>   select*from charges;
++-----------+--------+--------+
+| chargeson | charge | custid |
++-----------+--------+--------+
+| FOOD      |   1100 |  20231 |
+| ROOM      |   2000 |  20232 |
+| FOOD      |    800 |  20238 |
++-----------+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select chargeson,charge from charges,custdetails where custde
+tails.custid=charges.custid;
++-----------+--------+
+| chargeson | charge |
++-----------+--------+
+| FOOD      |   1100 |
+| ROOM      |   2000 |
++-----------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select*from charges;
++-----------+--------+--------+
+| chargeson | charge | custid |
++-----------+--------+--------+
+| FOOD      |   1100 |  20231 |
+| ROOM      |   2000 |  20232 |
+| FOOD      |    800 |  20238 |
++-----------+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql>  select custname,custid,charge from charges c,custdetails c1 where c1.custid=c.id;
++----------+--------+--------+
+| custname | custid | charge |
++----------+--------+--------+
+| SAI      |  20231 |   1100 |
+| SASI     |  20232 |   2000 |
++----------+--------+--------+
+2 rows in set (0.00 sec)
+
+mysql>  select custname,custid,charge from charges c,custdetails c1 where c1.custid=c.id;
++----------+--------+--------+
+| custname | custid | charge |
++----------+--------+--------+
+| SAI      |  20231 |   1100 |
+| SASI     |  20232 |   2000 |
++----------+--------+--------+
+2 rows in set (0.00 sec)
+
+mysql>

@@ -1,0 +1,106 @@
+Enter password: *****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.5.62 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use resturant;
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_resturant |
++---------------------+
+| charges             |
+| custdetails         |
+| custdetails1        |
+| customer            |
+| customerorder       |
+| custpayment         |
+| custroom            |
++---------------------+
+7 rows in set (0.04 sec)
+
+mysql> select*from custdetails;
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+| custid | custname | custmobileno | custorder | custcharge | custpaymentmethod | custaddress | custaadharno | custoccupation |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+|  20231 | SAI      |      6304632 | FOOD      |       1100 | UPI               | TS  |     45632198 | DANCER         |
+|  20232 | SASI     |      7989632 | ROOM      |       2000 | CARD              | TS  |     78945612 | BUSINESS       |
+|  20233 | RAVI     |      7989343 | FOOD      |       1200 | CASH
+       | AP          |     66498231 | FARMER         |
+|  20234 | CHANDU   |      9390260 | ROOM      |       1600 | UPI               | TS  |     12345678 | STUDENT        |
+|  20235 | BANNU    |     91823157 | FOOD      |        600 | CREDIT CARD       | TN  |     98712356 | ENGINEER       |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> create view custcharge_view as select custorder,custcharge from custdetails;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select*from custcharge_view;
++-----------+------------+
+| custorder | custcharge |
++-----------+------------+
+| FOOD      |       1100 |
+| ROOM      |       2000 |
+| FOOD      |       1200 |
+| ROOM      |       1600 |
+| FOOD      |        600 |
++-----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> create index custcharge on custdetails(custcharge);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show index from custdetails;
++-------------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table       | Non_unique | Key_name   | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++-------------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| custdetails |          0 | PRIMARY    |            1 | custid      | A         | 5 |     NULL | NULL   |      | BTREE      |         |               |
+| custdetails |          0 | custid     |            1 | custid      | A         | 5 |     NULL | NULL   |      | BTREE      |         |
+     |
+| custdetails |          1 | custcharge |            1 | custcharge  | A         | 5 |     NULL | NULL   | YES  | BTREE      |         |
+     |
++-------------+------------+------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+3 rows in set (0.04 sec)
+
+mysql> create table per(pid int NOT NULL AUTO_INCREMENT,Name varchar(50),Age int(3),PRIMARYKEY(pid));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>  desc per;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| pid   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| Name  | varchar(50) | YES  |     | NULL    |                |
+| Age   | int(3)      | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+3 rows in set (0.05 sec)
+
+mysql> alter table per AUTO_INCREMENT=100;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into per(Name,Age) values ("VIKKY",40);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into per(Name,Age) values ("VIKAS",30);
+Query OK, 1 row affected (0.04 sec)
+
+mysql>  select*from per;
++-----+-------+------+
+| pid | Name  | Age  |
++-----+-------+------+
+| 100 | VIKKY |   40 |
+| 101 | VIKAS |   30 |
++-----+-------+------+
+2 rows in set (0.00 sec)
+
+mysql>

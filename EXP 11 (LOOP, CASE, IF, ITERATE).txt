@@ -1,0 +1,127 @@
+Enter password: *****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.5.62 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use resturant;
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_resturant |
++---------------------+
+| charges             |
+| custcharge_view     |
+| custdetails         |
+| custdetails1        |
+| customer            |
+| customerorder       |
+| custpayment         |
+| custroom            |
+| per                 |
++---------------------+
+9 rows in set (0.00 sec)
+
+mysql> select*from custdetails;
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+| custid | custname | custmobileno | custorder | custcharge | custpaymentmethod | custaddress | custaadharno | custoccupation |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+|  20231 | SAI      |      6304632 | FOOD      |       1100 | UPI               | TS          |     45632198 | DANCER         |
+|  20232 | SASI     |      7989632 | ROOM      |       2000 | CARD              | TS          |     78945612 | BUSINESS       |
+|  20233 | RAVI     |      7989343 | FOOD      |       1200 | CASH              | AP          |     66498231 | FARMER         |
+|  20234 | CHANDU   |      9390260 | ROOM      |       1600 | UPI               | TS          |     12345678 | STUDENT        |
+|  20235 | BANNU    |     91823157 | FOOD      |        600 | CREDIT CARD       | TN          |     98712356 | ENGINEER       |
++--------+----------+--------------+-----------+------------+-------------------+-------------+--------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT custname, custcharge ,CASE WHEN custcharge>1500 THEN 'HEATLY WELCOME' WHEN custcharge>1000 THEN 'WELCOME' ELSE 'THANK YOU' END AS performanceFROM custdetails;
++----------+------------+----------------+
+| custname | custcharge | performance    |
++----------+------------+----------------+
+| SAI      |       1100 | WELCOME        |
+| SASI     |       2000 | HEATLY WELCOME |
+| RAVI     |       1200 | WELCOME        |
+| CHANDU   |       1600 | HEATLY WELCOME |
+| BANNU    |        600 | THANK YOU      |
++----------+------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql>  select custname,custcharge,if(custcharge>=1500,"5* performance","3* performance") from custdetails;
++----------+------------+--------------------------------------------------------+
+| custname | custcharge | if(custcharge>=1500,"5* performance","3* performance") |
++----------+------------+--------------------------------------------------------+
+| SAI      |       1100 | 3* performance                                         |
+| SASI     |       2000 | 5* performance                                         |
+| RAVI     |       1200 | 3* performance                                         |
+| CHANDU   |       1600 | 5* performance                                         |
+| BANNU    |        600 | 3* performance                                         |
++----------+------------+--------------------------------------------------------+
+5 rows in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION REPEAT_DEMO(INC INT)
+    -> RETURNS CHAR(40)
+    ->  DETERMINISTIC
+    ->  BEGIN
+    ->  DECLARE INCOME INT;
+    ->  SET INCOME=0;
+    -> REPEAT
+    -> SET INCOME=INCOME+INC;
+    ->  UNTIL INCOME>4000
+    -> END REPEAT;
+    -> RETURN "INCOME>4000 DETECTED";
+    -> END;
+    ->  $$
+Query OK, 0 rows affected (0.06 sec)
+
+mysql>  SELECT REPEAT_DEMO(3000);$$
++----------------------+
+| REPEAT_DEMO(3000)    |
++----------------------+
+| INCOME>4000 DETECTED |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT REPEAT_DEMO(4000);$$
++----------------------+
+| REPEAT_DEMO(4000)    |
++----------------------+
+| INCOME>4000 DETECTED |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER $$
+mysql> CREATE FUNCTION WHILE_DEMO(VALUE CHAR(1))
+    -> RETURNS CHAR(20)
+    -> DETERMINISTIC
+    -> BEGIN
+    -> DECLARE STR CHAR(100);
+    ->  DECLARE I INT;
+    -> SET STR='';
+    -> SET I=1;
+    ->  LABEL:
+    -> WHILE I<=5 DO
+    -> SET STR =CONCAT(STR,VALUE);
+    -> SET I=I+1;
+    -> END WHILE LABEL;
+    -> RETURN STR;
+    -> END;
+    ->  $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>  SELECT WHILE_DEMO('A');$$
++-----------------+
+| WHILE_DEMO('A') |
++-----------------+
+| AAAAA           |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql>
